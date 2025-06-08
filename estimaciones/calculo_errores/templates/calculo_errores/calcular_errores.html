@@ -1,36 +1,28 @@
 {% extends 'calculo_errores/base.html' %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Ingrese los valores</h4>
-            </div>
-            <div class="card-body">
-                <form method="post">
-                    {% csrf_token %}
-                    
-                    <div class="mb-3">
-                        {{ form.valor_real.label_tag }}
-                        {{ form.valor_real }}
-                        {% if form.valor_real.errors %}
-                            <div class="text-danger">{{ form.valor_real.errors }}</div>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="mb-4">
-                        {{ form.valor_aprox.label_tag }}
-                        {{ form.valor_aprox }}
-                        {% if form.valor_aprox.errors %}
-                            <div class="text-danger">{{ form.valor_aprox.errors }}</div>
-                        {% endif %}
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary w-100">Calcular Errores</button>
-                </form>
-            </div>
-        </div>
+<form method="post" action="{% url 'calculo_errores:resultados' %}">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label for="valor_real">Valor Real:</label>
+        <input type="number" step="any" name="valor_real" required>
     </div>
-</div>
+    
+    <div class="form-group">
+        <label for="valor_aprox">Valor Aproximado:</label>
+        <input type="number" step="any" name="valor_aprox" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="tipo_error">Tipo de Error:</label>
+        <select name="tipo_error" required>
+            <option value="absoluto">Error Absoluto</option>
+            <option value="relativo">Error Relativo</option>
+            <option value="porcentual">Error Relativo Porcentual</option>
+        </select>
+    </div>
+    
+    <button type="submit">Calcular Error</button>
+</form>
 {% endblock %}
