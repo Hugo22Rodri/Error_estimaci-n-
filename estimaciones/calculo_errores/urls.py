@@ -6,4 +6,5 @@ app_name = 'calculo_errores'
 urlpatterns = [
     path('', views.calcular_errores, name='calcular_errores'),
     path('resultados/', views.resultados, name='resultados'),
+    path('estimacion-error/', views.metodo_estimacion_error, name='estimacion_error'),
 ]

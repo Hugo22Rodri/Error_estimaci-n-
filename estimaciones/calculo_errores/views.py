@@ -1,34 +1,36 @@
 from django.shortcuts import render
-from .utils import error_absoluto, error_relativo, error_relativo_porcentual
+import math
 
-def calcular_errores(request):
-    return render(request, 'calculo_errores/calcular_errores.html')
+from estimaciones.calculo_errores.utils import estimacion_error_punto_fijo
 
-def resultados(request):
+def metodo_estimacion_error(request):
     context = {}
-    resultado = None
-    tipo_error = None
     
     if request.method == 'POST':
-        valor_real = request.POST.get('valor_real')
-        valor_aprox = request.POST.get('valor_aprox')
-        tipo_error = request.POST.get('tipo_error')
-        
-        if tipo_error == 'absoluto':
-            resultado = error_absoluto(valor_real, valor_aprox)
-        elif tipo_error == 'relativo':
-            resultado = error_relativo(valor_real, valor_aprox)
-        elif tipo_error == 'porcentual':
-            resultado = error_relativo_porcentual(valor_real, valor_aprox)
-        
-        if resultado == float('inf'):
-            resultado = "∞"  # Representar infinito como un símbolo seguro para la plantilla
-
-        context = {
-            'valor_real': valor_real,
-            'valor_aprox': valor_aprox,
-            'resultado': resultado,
-            'tipo_error': tipo_error
-        }
+        try:
+            # Obtener parámetros del formulario
+            funcion = request.POST.get('funcion')
+            x0 = float(request.POST.get('x0'))
+            tol = float(request.POST.get('tolerancia'))
+            
+            # Definir función g(x)
+            def g(x):
+                return eval(funcion, {'__builtins__': None}, {'x': x, 'math': math, 'e': math.e, 'pi': math.pi})
+            
+            # Ejecutar método de estimación de error
+            iteraciones, solucion, num_iter = estimacion_error_punto_fijo(g, x0, tol)
+            
+            context = {
+                'funcion': funcion,
+                'x0': x0,
+                'tol': tol,
+                'iteraciones': iteraciones,
+                'solucion': solucion,
+                'num_iter': num_iter,
+                'convergio': num_iter < 100
+            }
+            
+        except Exception as e:
+            context['error'] = f"Error en los datos: {str(e)}"
     
-    return render(request, 'calculo_errores/resultados.html', context)
+    return render(request, 'calculo_errores/estimacion_error.html', context)
