@@ -1,0 +1,36 @@
+{% extends 'calculo_errores/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Ingrese los valores</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        {{ form.valor_real.label_tag }}
+                        {{ form.valor_real }}
+                        {% if form.valor_real.errors %}
+                            <div class="text-danger">{{ form.valor_real.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        {{ form.valor_aprox.label_tag }}
+                        {{ form.valor_aprox }}
+                        {% if form.valor_aprox.errors %}
+                            <div class="text-danger">{{ form.valor_aprox.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">Calcular Errores</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

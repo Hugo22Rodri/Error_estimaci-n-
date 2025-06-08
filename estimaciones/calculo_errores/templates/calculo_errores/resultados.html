@@ -1,0 +1,43 @@
+{% extends 'calculo_errores/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Resultados del Cálculo</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p><strong>Valor Real:</strong> {{ resultados.valor_real }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Valor Aproximado:</strong> {{ resultados.valor_aprox }}</p>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p><strong>Error Absoluto:</strong> {{ resultados.error_abs }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><strong>Error Relativo:</strong> {{ resultados.error_rel }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><strong>Error Porcentual:</strong> {{ resultados.error_porc }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="{% url 'calculo_errores:calcular_errores' %}" class="btn btn-primary">
+                        Realizar nuevo cálculo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
