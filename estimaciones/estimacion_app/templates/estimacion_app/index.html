@@ -1,0 +1,62 @@
+{% extends "estimacion_app/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Estimación de Error en Métodos Iterativos</h1>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_iterations" class="form-label">{{ form.iterations.label }}</label>
+                    {{ form.iterations }}
+                    {% if form.iterations.errors %}
+                        <div class="alert alert-danger mt-2">
+                            {{ form.iterations.errors }}
+                        </div>
+                    {% endif %}
+                    <div class="form-text">{{ form.iterations.help_text }}</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Calcular Errores</button>
+            </form>
+        </div>
+    </div>
+
+    {% if resultados %}
+    <div class="card shadow-sm">
+        <div class="card-header bg-light">
+            <h2 class="h5 mb-0">Resultados</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Iteración</th>
+                            <th>Valor</th>
+                            <th>Error Aprox. (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in resultados %}
+                        <tr>
+                            <td>{{ item.iteracion }}</td>
+                            <td>{{ item.valor|floatformat:6 }}</td>
+                            <td>
+                                {% if item.error is None %}
+                                    <span class="text-muted">-</span>
+                                {% else %}
+                                    {{ item.error|floatformat:6 }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

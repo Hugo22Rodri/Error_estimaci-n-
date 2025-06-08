@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'calculo_errores',
+    'estimacion_app',  # Your main app for estimations
 ]
 
 MIDDLEWARE = [
